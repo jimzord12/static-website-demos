@@ -1,0 +1,241 @@
+/* =============================================================================
+ * theme.css — {{HOTEL_NAME}}, Mykonos — design tokens (source of truth)
+ * Tailwind v4 (CSS-first). Two tiers: PRIMITIVES (raw ramp) -> SEMANTICS (roles).
+ * Components use SEMANTIC utilities only (bg-surface, text-accent, bg-cta, ...).
+ *
+ * CHIAROSCURO: the page is DARK by default. Wrap a section in `.band-light` to
+ * flip it to whitewash. The semantic variables are remapped in `.band-light`,
+ * so the SAME utilities resolve to light values inside it — write components once.
+ *
+ * Mirrors DESIGN.md. Motion numbers are mirrored in tokens.ts — keep in sync.
+ * ========================================================================== */
+
+@import "tailwindcss";
+
+@theme {
+  /* ---- Fonts (next/font/google, subsets ['latin','greek']) ---- */
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans:    var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* ======================= TIER 1 — PRIMITIVES (raw) ======================= */
+  /* Onyx (cinematic night) */
+  --color-onyx-950: oklch(0.178 0.009 224.0);
+  --color-onyx-900: oklch(0.211 0.013 222.8);
+  --color-onyx-800: oklch(0.256 0.018 227.5);
+  --color-onyx-700: oklch(0.304 0.023 230.0);
+  --color-onyx-600: oklch(0.368 0.024 226.5);
+  --color-onyx-500: oklch(0.462 0.025 223.5);
+  /* Lime / whitewash */
+  --color-lime-50:  oklch(0.968 0.009 84.6);
+  --color-lime-100: oklch(0.938 0.014 84.6);
+  --color-lime-200: oklch(0.891 0.022 83.3);
+  --color-lime-300: oklch(0.823 0.032 84.6);
+  /* Warm neutrals for light-band text */
+  --color-stone-500: oklch(0.593 0.036 79.1);
+  --color-stone-600: oklch(0.488 0.035 81.5);
+  --color-ink-900:   oklch(0.233 0.013 78.0);
+  /* Aegean (deep sea) */
+  --color-aegean-400: oklch(0.624 0.076 221.3);
+  --color-aegean-500: oklch(0.557 0.081 222.6);
+  --color-aegean-600: oklch(0.473 0.071 223.8);
+  --color-aegean-700: oklch(0.399 0.061 225.3);
+  --color-aegean-800: oklch(0.335 0.050 224.6);
+  /* Bronze / aged brass (metallic luxury) */
+  --color-bronze-300: oklch(0.809 0.069 79.0);
+  --color-bronze-400: oklch(0.731 0.082 72.7);
+  --color-bronze-500: oklch(0.652 0.093 68.7);
+  --color-bronze-600: oklch(0.564 0.089 67.7);
+  --color-bronze-700: oklch(0.486 0.073 64.6);
+  /* Sunset amber (sparing) */
+  --color-amber-400: oklch(0.761 0.115 67.9);
+  --color-amber-500: oklch(0.682 0.130 60.6);
+
+  /* ============================ TYPE SCALE ================================ */
+  /* In v4, --text-*--line-height pairs the line-height to the size utility. */
+  --text-display-xl: clamp(3rem, 7vw + 1rem, 5rem);     --text-display-xl--line-height: 1.02;
+  --text-display-lg: clamp(2.5rem, 5vw + 1rem, 3.75rem);--text-display-lg--line-height: 1.08;
+  --text-h1: clamp(2.25rem, 3vw + 1rem, 2.75rem);       --text-h1--line-height: 1.12;
+  --text-h2: 2rem;        --text-h2--line-height: 1.2;
+  --text-h3: 1.5rem;      --text-h3--line-height: 1.3;
+  --text-quote: clamp(1.75rem, 3vw, 2rem); --text-quote--line-height: 1.35;
+  --text-lead: 1.25rem;   --text-lead--line-height: 1.7;
+  --text-body: 1.0625rem; --text-body--line-height: 1.75;
+  --text-body-sm: 0.9375rem; --text-body-sm--line-height: 1.6;
+  --text-eyebrow: 0.8125rem; --text-eyebrow--line-height: 1.2;
+  --text-caption: 0.8125rem; --text-caption--line-height: 1.5;
+
+  /* ============================== RADIUS ================================= */
+  --radius-sm: 4px;
+  --radius-md: 8px;   /* buttons/inputs — deliberately not a pill */
+  --radius-lg: 14px;  /* cards */
+  --radius-xl: 24px;  /* feature media */
+
+  /* ===================== SHADOWS (warm onyx-tinted) ===================== */
+  --shadow-1: 0 1px 2px rgba(13,18,20,.18), 0 4px 16px rgba(13,18,20,.14);
+  --shadow-2: 0 8px 30px rgba(13,18,20,.22);
+  --shadow-3: 0 20px 60px rgba(13,18,20,.30);
+  --shadow-glow: 0 0 0 1px var(--color-border), 0 8px 40px rgba(0,0,0,.45);
+
+  /* ===================== EASING (generates ease-* utils) ================ */
+  --ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --ease-entrance: cubic-bezier(0, 0, 0, 1);
+  --ease-exit:     cubic-bezier(.3, 0, 1, 1);
+}
+
+/* -----------------------------------------------------------------------------
+ * TIER 2 — SEMANTICS. Declared as plain vars (--surface, --text, ...) so they
+ * can be REMAPPED per band, then bridged into Tailwind utilities via
+ * `@theme inline` (which emits utilities that reference the var at runtime, so
+ * the cascade inside `.band-light` takes effect).
+ * --------------------------------------------------------------------------- */
+@theme inline {
+  --color-surface:        var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-text:           var(--text);
+  --color-text-muted:     var(--text-muted);
+  --color-text-subtle:    var(--text-subtle);
+  --color-primary:        var(--primary);
+  --color-accent:         var(--accent);
+  --color-cta:            var(--cta);
+  --color-cta-hover:      var(--cta-hover);
+  --color-cta-text:       var(--cta-text);
+  --color-highlight:      var(--highlight);
+  --color-border:         var(--border);
+  --color-border-strong:  var(--border-strong);
+  --color-ring:           var(--ring);
+}
+
+/* DARK by default (the dramatic baseline). */
+:root {
+  --surface:        var(--color-onyx-950);
+  --surface-raised: var(--color-onyx-800);
+  --surface-sunken: var(--color-onyx-900);
+  --text:           var(--color-lime-50);
+  --text-muted:     var(--color-lime-300);
+  --text-subtle:    var(--color-onyx-500);
+  --primary:        var(--color-aegean-400);
+  --accent:         var(--color-bronze-300);
+  --cta:            var(--color-bronze-400);
+  --cta-hover:      var(--color-bronze-300);
+  --cta-text:       var(--color-onyx-950);
+  --highlight:      var(--color-amber-500);
+  --border:         var(--color-onyx-700);
+  --border-strong:  var(--color-onyx-600);
+  --ring:           var(--color-bronze-400);
+
+  /* Section rhythm + motion durations (not Tailwind namespaces; used via var()
+   * in component CSS and mirrored in tokens.ts). */
+  --space-section:    clamp(5rem, 10vw, 9rem);
+  --space-section-lg: clamp(7rem, 14vw, 12rem);
+  --duration-fast:       180ms;
+  --duration-base:       280ms;
+  --duration-slow:       450ms;
+  --duration-deliberate: 650ms;
+}
+
+/* LIGHT band — whitewash. Add `.band-light` to any section to flip it. */
+.band-light {
+  --surface:        var(--color-lime-50);
+  --surface-raised: #ffffff;
+  --surface-sunken: var(--color-lime-100);
+  --text:           var(--color-ink-900);
+  --text-muted:     var(--color-stone-600);
+  --text-subtle:    var(--color-stone-500);
+  --primary:        var(--color-aegean-600);
+  --accent:         var(--color-bronze-700);
+  --cta:            var(--color-onyx-900);
+  --cta-hover:      var(--color-onyx-800);
+  --cta-text:       var(--color-lime-50);
+  --highlight:      var(--color-amber-500);
+  --border:         var(--color-lime-200);
+  --border-strong:  var(--color-lime-300);
+  --ring:           var(--color-aegean-500);
+}
+
+/* ---------------------------------------------------------------------------
+ * shadcn/ui bridge — point shadcn's vars at OUR semantics so added components
+ * inherit the identity AND flip with the band. Defined for both :root and
+ * .band-light via the shared semantic vars above.
+ * ------------------------------------------------------------------------- */
+:root, .band-light {
+  --background: var(--surface);
+  --foreground: var(--text);
+  --card: var(--surface-raised);
+  --card-foreground: var(--text);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--text);
+  --muted: var(--surface-sunken);
+  --muted-foreground: var(--text-muted);
+  --primary-foreground: var(--cta-text);
+  --secondary: var(--surface-sunken);
+  --secondary-foreground: var(--text);
+  --destructive: var(--color-amber-500);
+  --destructive-foreground: var(--color-onyx-950);
+  --input: var(--border);
+  --radius: var(--radius-md);
+  /* --primary / --accent / --border / --ring already map via the names above. */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-muted-foreground: var(--muted-foreground);
+}
+
+/* ----------------------------- Base layer ------------------------------ */
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); }
+
+  /* Wide-tracked bronze eyebrow (the editorial kicker). */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  /* Signature "brass horizon" rule under an eyebrow. */
+  .horizon-rule {
+    width: 3rem; height: 1px; border: 0;
+    background: var(--color-accent); margin: 0.75rem 0 0;
+  }
+
+  /* Visible keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Scroll-reveal hook (paired with useReveal in tokens.ts). */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity var(--duration-deliberate) var(--ease-entrance),
+      transform var(--duration-deliberate) var(--ease-entrance);
+  }
+  [data-reveal].is-visible { opacity: 1; transform: none; }
+
+  /* Honour reduced motion — hard requirement. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+      scroll-behavior: auto !important;
+    }
+    [data-reveal] { opacity: 1; transform: none; }
+  }
+}
